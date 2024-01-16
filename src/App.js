@@ -14,6 +14,7 @@ function App() {
   const [postList, setPostList] = useState([]);
   const [userLogin, setUserLogin] = useState(false);
   const [username, setUsername] = useState('');
+  const [fullName, setFullName] = useState('');
   const [activeTab, setActivetab] = useState('');
   const [messagesLoading, setMessagesLoading] = useState(true);
 
@@ -37,6 +38,7 @@ function App() {
             <li><Link className={`nav-link px-2 link-dark ${activeTab === 'add-post' ? 'active' : ''}`} to="/add-post" onClick={(e) => setActivetab('add-post')}>Add a Post</Link></li>
           </ul>
           <div className="col-md-3 text-end">
+              {userLogin && <span class="spacing-right"><i>Welcome, </i>{fullName}</span>}
             {!userLogin ? 
               <Link to="/login"><button type="button" className="btn btn-outline-primary me-2" onClick={() => setActivetab('')}>Login</button></Link>
             : <Link to="/logout"><button type="button" className="btn btn-outline-primary me-2" onClick={() => {setUserLogin(false); setActivetab('')}}>Logout</button></Link>
@@ -47,8 +49,8 @@ function App() {
         <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/secret-posts" element={<SecretpostList postList={postList} messagesLoading={messagesLoading}/>} />
-            <Route path="/add-post" element={<AddSecretpost postList={postList} setPostList={setPostList} userLogin={userLogin} username={username}/>}/>
-            <Route path="/login" element={<Login userLogin={userLogin} setUserLogin={setUserLogin} setUsername={setUsername}/>} />
+            <Route path="/add-post" element={<AddSecretpost postList={postList} setPostList={setPostList} userLogin={userLogin} username={username} />}/>
+            <Route path="/login" element={<Login userLogin={userLogin} setUserLogin={setUserLogin} setUsername={setUsername} setFullName={setFullName} />} />
             <Route path="/logout" element={<Logout />} />
             <Route path="/register" element={<Register />} />
         </Routes>

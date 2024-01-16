@@ -28,6 +28,7 @@ export default function Login(props) {
         })
         .then((response) => {
           if (response.data.status === 'success') {
+            props.setFullName(response.data.name);
             props.setUserLogin(true);
             props.setUsername(emailAddress.current.value);
             setFlashMessage('User logged in successfully');

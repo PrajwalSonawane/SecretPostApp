@@ -17,3 +17,9 @@
     align-items: center;
     justify-content: center;
 }
+
+.spacing-right {
+    margin-right: 10px;
+    font-size: 1rem;
+    font-weight: 300;
+}
