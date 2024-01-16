@@ -12,12 +12,14 @@ import Loader from "../Loader/Loader";
     const handleInputFocus = (e) => {
         setMessageAddStatus(false);
     };
+
     const handleInputChange = (e) => {
         setSecretMessageInput(e.target.value);
     };
+
     const handleFormSubmit = (e) => {
         e.preventDefault();
-        if(secretMessageInput==="") {
+        if (secretMessageInput === "") {
             setMessageAddStatus(true);
             setFlashMessage("Secret message cannot be empty!");
             return;
@@ -49,6 +51,7 @@ import Loader from "../Loader/Loader";
             setIsLoading(false);
         });
     };
+    
     return (
         <>
             {isLoading && <Loader />}
@@ -73,7 +76,7 @@ import Loader from "../Loader/Loader";
                     </div>
                 </div> :
                 (<div className="alert alert-secondary d-flex align-items-center" role="alert">
-                    <GoAlert size={35} color="yellow" />
+                    <GoAlert size={35} color="red" />
                     <div style={{paddingLeft: '10px'}}>
                         {flashMessage}
                     </div>

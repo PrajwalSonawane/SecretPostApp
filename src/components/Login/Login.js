@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { Link } from "react-router-dom";
-import { GoCheck, GoX } from "react-icons/go";
+import { GoCheck, GoX, GoAlert } from "react-icons/go";
 import axios from "axios";
 import Loader from "../Loader/Loader";
 
@@ -11,6 +11,15 @@ export default function Login(props) {
     const [flashMessage, setFlashMessage] = useState('');
 
     const handleLogin = () => {
+        if (emailAddress.current.value === '' || password.current.value === '') {
+            setFlashMessage('Enter all the fields');
+            return;
+        }
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(emailAddress.current.value)) {
+            setFlashMessage('Invalid email Id');
+            return;
+        }
         setIsLoading(true);
         axios
         .post("https://user-authentication-system-ecc2.vercel.app/login", {
@@ -66,6 +75,24 @@ export default function Login(props) {
         {flashMessage === 'Username or password is incorrect' && (
             <div className="alert alert-danger d-flex align-items-center" role="alert">
                <GoX size={35} color="red" />
+                <div style={{paddingLeft: '10px'}}>
+                    {flashMessage}
+                </div>
+            </div>
+        ) 
+        }
+        {flashMessage === 'Enter all the fields' && (
+            <div className="alert alert-secondary d-flex align-items-center" role="alert">
+               <GoAlert size={35} color="red" />
+                <div style={{paddingLeft: '10px'}}>
+                    {flashMessage}
+                </div>
+            </div>
+        ) 
+        }
+        {flashMessage === 'Invalid email Id' && (
+            <div className="alert alert-secondary d-flex align-items-center" role="alert">
+               <GoAlert size={35} color="red" />
                 <div style={{paddingLeft: '10px'}}>
                     {flashMessage}
                 </div>

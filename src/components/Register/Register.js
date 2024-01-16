@@ -19,6 +19,12 @@ export default function Register() {
             setFlashMessage('Fill all the fields');
             return;
         }
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(emailAddress.current.value)) {
+            setMessageAddStatus(true);
+            setFlashMessage('Invalid email Id');
+            return;
+        }
         if (password.current.value !== passwordConfirm.current.value) {
             setMessageAddStatus(true);
             setFlashMessage('Passwords does not match');
@@ -63,7 +69,7 @@ export default function Register() {
                     </div>
                 </div> :
                 (<div className="alert alert-secondary d-flex align-items-center" role="alert">
-                    <GoAlert size={35} color="yellow" />
+                    <GoAlert size={35} color="red" />
                     <div style={{paddingLeft: '10px'}}>
                         {flashMessage}
                     </div>
