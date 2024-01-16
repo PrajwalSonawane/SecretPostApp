@@ -1,4 +1,5 @@
 import Secretpost from "../Secretpost/Secretpost";
+import Loader from "../Loader/Loader";
 
 export default function SecretpostList(props) {
     /**
@@ -6,11 +7,12 @@ export default function SecretpostList(props) {
      */
     return (
         <>
-            <h4>Read other people secret message here</h4>
-            <ul className="list-group">
-                {props.postList.map((post) => {
+            <h4 className="mb-5">Read other people secrets here</h4>
+            {props.messagesLoading && <Loader />}
+            <ul className="list-group list-group-flush">
+                {props.postList.map((post, index) => {
                     return (
-                        <Secretpost post={post}></Secretpost>
+                        <Secretpost post={post} secretNumber={index + 1}></Secretpost>
                     )
                 })}
             </ul>

@@ -1,0 +1,19 @@
+.active-tab {
+    border-bottom: black;
+}
+
+.container-box {
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
+.brand-logo-image {
+    height: 140px;
+    width: 140px;
+}
+
+.header-items {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

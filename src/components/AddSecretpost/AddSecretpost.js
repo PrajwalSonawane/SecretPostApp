@@ -1,8 +1,14 @@
 import { useState } from "react";
+import { GoAlert, GoCheck } from "react-icons/go";
+import axios from "axios";
+import Loader from "../Loader/Loader";
 
  export default function AddSecretpost(props) {
     const [secretMessageInput, setSecretMessageInput] = useState('');
     const [messageAddStatus, setMessageAddStatus] = useState(false);
+    const [flashMessage, setFlashMessage] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+
     const handleInputFocus = (e) => {
         setMessageAddStatus(false);
     };
@@ -11,11 +17,41 @@ import { useState } from "react";
     };
     const handleFormSubmit = (e) => {
         e.preventDefault();
-        props.postList.push({message: secretMessageInput});
-        setMessageAddStatus(true);
+        if(secretMessageInput==="") {
+            setMessageAddStatus(true);
+            setFlashMessage("Secret message cannot be empty!");
+            return;
+        }
+        if (!props.userLogin) {
+            setMessageAddStatus(true);
+            setFlashMessage("Please login to add a post");
+            return;
+        }
+        setIsLoading(true);
+        axios.post("https://user-authentication-system-ecc2.vercel.app/checkmessage", {
+            username: props.username
+          })
+          .then((response) => {
+            if (response.data.message) {
+                setMessageAddStatus(true);
+                setFlashMessage("One user is only allowed to post 1 secret message");
+            } else {
+                props.setPostList((prevPost) => [...prevPost, {message: secretMessageInput}]);
+                axios.post("https://user-authentication-system-ecc2.vercel.app/message", {
+                  username: props.username,
+                  message: secretMessageInput
+                })
+                .then((response) => {
+                });
+                setMessageAddStatus(true);
+                setFlashMessage("Your secret Message was added successfully");
+            }
+            setIsLoading(false);
+        });
     };
     return (
         <>
+            {isLoading && <Loader />}
             <form>
                 <div className="form-group">
                     <textarea className="form-control h-100"
@@ -28,14 +64,21 @@ import { useState } from "react";
                 </div>
             </form>
             <br></br>
-            {messageAddStatus && <div class="alert alert-success d-flex align-items-center" role="alert">
-                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="30" height="30" viewBox="0 0 48 48">
-                <path fill="#43A047" d="M40.6 12.1L17 35.7 7.4 26.1 4.6 29 17 41.3 43.4 14.9z"></path>
-                </svg>
-                <div style={{paddingLeft: '5px'}}>
-                    Your secret Message was added successfully
+            {messageAddStatus ? (
+                flashMessage === 'Your secret Message was added successfully' ?
+                <div className="alert alert-success d-flex align-items-center" role="alert">
+                    <GoCheck size={35} color="green" />
+                    <div style={{paddingLeft: '10px'}}>
+                        {flashMessage}
+                    </div>
+                </div> :
+                (<div className="alert alert-secondary d-flex align-items-center" role="alert">
+                    <GoAlert size={35} color="yellow" />
+                    <div style={{paddingLeft: '10px'}}>
+                        {flashMessage}
+                    </div>
                 </div>
-            </div>}
+                )) : null}
         </>
     )
  }
